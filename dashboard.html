@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>12321 投诉量监控看板</title>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+      min-height: 100vh;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 32px;
+      background: #161b22;
+      border-bottom: 1px solid #30363d;
+    }
+
+    header h1 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #58a6ff;
+      letter-spacing: 0.02em;
+    }
+
+    #refresh-info {
+      font-size: 0.8rem;
+      color: #8b949e;
+    }
+
+    .cards {
+      display: flex;
+      gap: 16px;
+      padding: 24px 32px 8px;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      flex: 1;
+      min-width: 160px;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 10px;
+      padding: 18px 22px;
+    }
+
+    .card .label {
+      font-size: 0.78rem;
+      color: #8b949e;
+      margin-bottom: 8px;
+    }
+
+    .card .value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #58a6ff;
+    }
+
+    .card .sub {
+      font-size: 0.75rem;
+      color: #8b949e;
+      margin-top: 4px;
+    }
+
+    .card.up   .value { color: #f85149; }
+    .card.down .value { color: #3fb950; }
+
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      padding: 16px 32px 32px;
+    }
+
+    @media (max-width: 900px) {
+      .charts-grid { grid-template-columns: 1fr; }
+    }
+
+    .chart-card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    .chart-card.wide {
+      grid-column: 1 / -1;
+    }
+
+    .chart-card h2 {
+      font-size: 0.9rem;
+      color: #8b949e;
+      margin-bottom: 14px;
+      font-weight: 500;
+    }
+
+    .chart-box {
+      width: 100%;
+      height: 280px;
+    }
+
+    .chart-box.tall {
+      height: 340px;
+    }
+
+    #no-data {
+      display: none;
+      text-align: center;
+      padding: 80px 32px;
+      color: #8b949e;
+    }
+
+    #no-data p { margin-top: 10px; font-size: 0.85rem; }
+    #no-data code {
+      display: inline-block;
+      margin-top: 12px;
+      background: #161b22;
+      border: 1px solid #30363d;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      color: #58a6ff;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+    .badge-live { background: #1f6feb33; color: #58a6ff; border: 1px solid #1f6feb; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>📊 12321 投诉量监控看板 <span class="badge badge-live">实时</span></h1>
+  <span id="refresh-info">数据每小时自动更新 · 页面每5分钟刷新</span>
+</header>
+
+<div id="no-data">
+  <div style="font-size:3rem">📭</div>
+  <div style="font-size:1.1rem;margin-top:12px;">暂无数据</div>
+  <p>请先运行抓取程序，数据会每小时自动更新</p>
+  <code>python scheduler.py</code>
+</div>
+
+<div id="main-content">
+  <div class="cards">
+    <div class="card" id="card-today">
+      <div class="label">今日投诉量</div>
+      <div class="value" id="val-today">—</div>
+      <div class="sub" id="sub-today">—</div>
+    </div>
+    <div class="card" id="card-yesterday">
+      <div class="label">昨日投诉量</div>
+      <div class="value" id="val-yesterday">—</div>
+      <div class="sub">昨天</div>
+    </div>
+    <div class="card" id="card-7d">
+      <div class="label">近7天均值</div>
+      <div class="value" id="val-7d">—</div>
+      <div class="sub">日均投诉</div>
+    </div>
+    <div class="card" id="card-30d">
+      <div class="label">近30天均值</div>
+      <div class="value" id="val-30d">—</div>
+      <div class="sub">日均投诉</div>
+    </div>
+    <div class="card" id="card-max">
+      <div class="label">历史最高单日</div>
+      <div class="value" id="val-max">—</div>
+      <div class="sub" id="sub-max">—</div>
+    </div>
+  </div>
+
+  <div class="charts-grid">
+    <!-- 7天曲线 -->
+    <div class="chart-card">
+      <h2>近 7 天投诉曲线</h2>
+      <div class="chart-box" id="chart7"></div>
+    </div>
+
+    <!-- 15天曲线 -->
+    <div class="chart-card">
+      <h2>近 15 天投诉曲线</h2>
+      <div class="chart-box" id="chart15"></div>
+    </div>
+
+    <!-- 30天曲线（宽） -->
+    <div class="chart-card wide">
+      <h2>近 30 天投诉曲线</h2>
+      <div class="chart-box tall" id="chart30"></div>
+    </div>
+
+    <!-- 今日小时级走势 -->
+    <div class="chart-card wide">
+      <h2>今日实时走势（小时级快照）</h2>
+      <div class="chart-box" id="chartToday"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── 工具 ────────────────────────────────────────────────────────────────────
+const fmt = n => n == null ? '—' : n.toLocaleString('zh-CN');
+
+function avg(arr) {
+  const valid = arr.filter(v => v != null);
+  return valid.length ? Math.round(valid.reduce((a, b) => a + b, 0) / valid.length) : null;
+}
+
+// ── 图表主题色 ───────────────────────────────────────────────────────────────
+const COLORS = {
+  line7:   '#58a6ff',
+  line15:  '#79c0ff',
+  line30:  '#a5d6ff',
+  today:   '#f0883e',
+  area:    'rgba(88,166,255,0.12)',
+  grid:    '#21262d',
+  label:   '#8b949e',
+  tooltip: '#161b22',
+};
+
+function baseOption(xData, yData, color, areaColor) {
+  return {
+    backgroundColor: 'transparent',
+    tooltip: {
+      trigger: 'axis',
+      backgroundColor: COLORS.tooltip,
+      borderColor: '#30363d',
+      textStyle: { color: '#e6edf3', fontSize: 12 },
+      formatter: p => {
+        const d = p[0];
+        return `${d.axisValue}<br/><b style="color:${color}">${fmt(d.value)} 条</b>`;
+      }
+    },
+    grid: { left: 50, right: 20, top: 16, bottom: 36 },
+    xAxis: {
+      type: 'category',
+      data: xData,
+      axisLine: { lineStyle: { color: COLORS.grid } },
+      axisTick: { show: false },
+      axisLabel: { color: COLORS.label, fontSize: 11 },
+    },
+    yAxis: {
+      type: 'value',
+      splitLine: { lineStyle: { color: COLORS.grid } },
+      axisLabel: {
+        color: COLORS.label,
+        fontSize: 11,
+        formatter: v => v >= 1000 ? (v / 1000).toFixed(1) + 'k' : v,
+      },
+    },
+    series: [{
+      type: 'line',
+      data: yData,
+      smooth: true,
+      symbol: 'circle',
+      symbolSize: 6,
+      lineStyle: { color, width: 2.5 },
+      itemStyle: { color },
+      areaStyle: {
+        color: areaColor || COLORS.area,
+      },
+    }]
+  };
+}
+
+// ── 加载数据 ─────────────────────────────────────────────────────────────────
+// 云端数据 URL（替换为你的 GitHub 仓库地址）
+const CLOUD_URL = 'https://raw.githubusercontent.com/你的用户名/12321_monitor/main/data/complaints.json';
+
+async function loadData() {
+  // 优先尝试从云端获取
+  try {
+    const r = await fetch(CLOUD_URL + '?t=' + Date.now());
+    if (r.ok) return await r.json();
+  } catch {}
+
+  // 降级到本地数据
+  try {
+    const r = await fetch('data/complaints.json?t=' + Date.now());
+    if (r.ok) return await r.json();
+  } catch {}
+
+  return null;
+}
+
+// ── 主渲染 ───────────────────────────────────────────────────────────────────
+async function render() {
+  const raw = await loadData();
+
+  if (!raw || Object.keys(raw).length === 0) {
+    document.getElementById('main-content').style.display = 'none';
+    document.getElementById('no-data').style.display = 'block';
+    return;
+  }
+
+  // 按日期排序
+  const sortedDates = Object.keys(raw).sort();
+  const sortedCounts = sortedDates.map(d => raw[d].daily_count);
+
+  // 今天数据
+  const todayKey = sortedDates[sortedDates.length - 1];
+  const todayVal = raw[todayKey]?.daily_count;
+  const yesterdayVal = sortedDates.length >= 2
+    ? raw[sortedDates[sortedDates.length - 2]]?.daily_count
+    : null;
+
+  // 更新卡片
+  document.getElementById('val-today').textContent = fmt(todayVal);
+  document.getElementById('sub-today').textContent = todayKey;
+  document.getElementById('val-yesterday').textContent = fmt(yesterdayVal);
+
+  // 环比
+  if (todayVal != null && yesterdayVal != null) {
+    const diff = todayVal - yesterdayVal;
+    const pct  = ((diff / yesterdayVal) * 100).toFixed(1);
+    const card = document.getElementById('card-today');
+    card.classList.toggle('up',   diff > 0);
+    card.classList.toggle('down', diff < 0);
+  }
+
+  // 7天均值
+  const last7 = sortedCounts.slice(-7);
+  document.getElementById('val-7d').textContent = fmt(avg(last7));
+
+  // 30天均值
+  const last30 = sortedCounts.slice(-30);
+  document.getElementById('val-30d').textContent = fmt(avg(last30));
+
+  // 历史最高
+  const maxVal = Math.max(...sortedCounts.filter(v => v != null));
+  const maxDate = sortedDates[sortedCounts.indexOf(maxVal)];
+  document.getElementById('val-max').textContent = fmt(maxVal);
+  document.getElementById('sub-max').textContent = maxDate || '—';
+
+  // 公共图表初始化函数
+  function makeChart(id, dates, counts, color) {
+    const el = document.getElementById(id);
+    const chart = echarts.init(el, null, { renderer: 'canvas' });
+    chart.setOption(baseOption(dates, counts, color));
+    window.addEventListener('resize', () => chart.resize());
+    return chart;
+  }
+
+  // 7天图
+  const d7 = sortedDates.slice(-7);
+  makeChart('chart7', d7.map(d => d.slice(5)), d7.map(d => raw[d].daily_count), COLORS.line7);
+
+  // 15天图
+  const d15 = sortedDates.slice(-15);
+  makeChart('chart15', d15.map(d => d.slice(5)), d15.map(d => raw[d].daily_count), COLORS.line15);
+
+  // 30天图
+  const d30 = sortedDates.slice(-30);
+  makeChart('chart30', d30.map(d => d.slice(5)), d30.map(d => raw[d].daily_count), COLORS.line30);
+
+  // 今日小时级走势
+  const todaySnapshots = raw[todayKey]?.snapshots || [];
+  if (todaySnapshots.length > 0) {
+    const todayChart = echarts.init(document.getElementById('chartToday'), null, { renderer: 'canvas' });
+    todayChart.setOption(baseOption(
+      todaySnapshots.map(s => s.time),
+      todaySnapshots.map(s => s.count),
+      COLORS.today,
+      'rgba(240,136,62,0.12)'
+    ));
+    window.addEventListener('resize', () => todayChart.resize());
+  } else {
+    document.getElementById('chartToday').innerHTML =
+      '<div style="text-align:center;padding-top:80px;color:#8b949e;font-size:0.85rem;">今日暂无小时快照数据</div>';
+  }
+}
+
+render();
+
+// 每 5 分钟自动刷新页面数据（不刷新整页）
+setInterval(render, 5 * 60 * 1000);
+
+// 右上角时间更新
+setInterval(() => {
+  const now = new Date();
+  document.getElementById('refresh-info').textContent =
+    `最后刷新: ${now.toLocaleTimeString('zh-CN')} · 数据每小时更新`;
+}, 1000);
+</script>
+
+</body>
+</html>
