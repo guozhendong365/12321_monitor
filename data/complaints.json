@@ -1581,11 +1581,15 @@
     ]
   },
   "2026-04-01": {
-    "daily_count": 2308,
+    "daily_count": 8021,
     "snapshots": [
       {
         "time": "02:10",
         "count": 2308
+      },
+      {
+        "time": "05:21",
+        "count": 8021
       }
     ]
   }
