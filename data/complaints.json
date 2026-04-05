@@ -1893,11 +1893,15 @@
     ]
   },
   "2026-04-05": {
-    "daily_count": 2067,
+    "daily_count": 5310,
     "snapshots": [
       {
         "time": "02:04",
         "count": 2067
+      },
+      {
+        "time": "05:08",
+        "count": 5310
       }
     ]
   }
