@@ -2786,11 +2786,15 @@
     ]
   },
   "2026-04-18": {
-    "daily_count": 1673,
+    "daily_count": 8524,
     "snapshots": [
       {
         "time": "02:00",
         "count": 1673
+      },
+      {
+        "time": "05:03",
+        "count": 8524
       }
     ]
   }
