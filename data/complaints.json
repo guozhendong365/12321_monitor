@@ -3554,11 +3554,15 @@
     ]
   },
   "2026-04-30": {
-    "daily_count": 3500,
+    "daily_count": 9350,
     "snapshots": [
       {
         "time": "02:35",
         "count": 3500
+      },
+      {
+        "time": "05:54",
+        "count": 9350
       }
     ]
   }
