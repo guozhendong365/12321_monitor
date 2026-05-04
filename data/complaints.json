@@ -3818,11 +3818,15 @@
     ]
   },
   "2026-05-04": {
-    "daily_count": 2519,
+    "daily_count": 7315,
     "snapshots": [
       {
         "time": "02:31",
         "count": 2519
+      },
+      {
+        "time": "06:08",
+        "count": 7315
       }
     ]
   }
