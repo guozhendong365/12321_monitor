@@ -4499,11 +4499,15 @@
     ]
   },
   "2026-05-17": {
-    "daily_count": 3277,
+    "daily_count": 8991,
     "snapshots": [
       {
         "time": "02:43",
         "count": 3277
+      },
+      {
+        "time": "06:19",
+        "count": 8991
       }
     ]
   }
