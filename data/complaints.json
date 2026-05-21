@@ -4671,11 +4671,15 @@
     ]
   },
   "2026-05-21": {
-    "daily_count": 763,
+    "daily_count": 13041,
     "snapshots": [
       {
         "time": "00:04",
         "count": 763
+      },
+      {
+        "time": "05:06",
+        "count": 13041
       }
     ]
   }
