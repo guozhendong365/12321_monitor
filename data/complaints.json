@@ -5093,11 +5093,15 @@
     ]
   },
   "2026-05-31": {
-    "daily_count": 611,
+    "daily_count": 6215,
     "snapshots": [
       {
         "time": "00:04",
         "count": 611
+      },
+      {
+        "time": "05:15",
+        "count": 6215
       }
     ]
   }
