@@ -5352,11 +5352,15 @@
     ]
   },
   "2026-06-07": {
-    "daily_count": 745,
+    "daily_count": 8036,
     "snapshots": [
       {
         "time": "00:00",
         "count": 745
+      },
+      {
+        "time": "05:18",
+        "count": 8036
       }
     ]
   }
