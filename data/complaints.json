@@ -5887,11 +5887,15 @@
     ]
   },
   "2026-06-22": {
-    "daily_count": 757,
+    "daily_count": 17467,
     "snapshots": [
       {
         "time": "00:06",
         "count": 757
+      },
+      {
+        "time": "06:24",
+        "count": 17467
       }
     ]
   }
