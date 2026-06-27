@@ -6072,11 +6072,15 @@
     ]
   },
   "2026-06-27": {
-    "daily_count": 1064,
+    "daily_count": 9901,
     "snapshots": [
       {
         "time": "00:01",
         "count": 1064
+      },
+      {
+        "time": "04:49",
+        "count": 9901
       }
     ]
   }
