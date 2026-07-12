@@ -6743,11 +6743,15 @@
     ]
   },
   "2026-07-12": {
-    "daily_count": 3156,
+    "daily_count": 7107,
     "snapshots": [
       {
         "time": "02:21",
         "count": 3156
+      },
+      {
+        "time": "05:52",
+        "count": 7107
       }
     ]
   }
