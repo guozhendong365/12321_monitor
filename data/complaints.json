@@ -7138,11 +7138,15 @@
     ]
   },
   "2026-07-19": {
-    "daily_count": 2760,
+    "daily_count": 8050,
     "snapshots": [
       {
         "time": "02:13",
         "count": 2760
+      },
+      {
+        "time": "05:47",
+        "count": 8050
       }
     ]
   }
