@@ -7338,11 +7338,15 @@
     ]
   },
   "2026-07-23": {
-    "daily_count": 798,
+    "daily_count": 8998,
     "snapshots": [
       {
         "time": "00:00",
         "count": 798
+      },
+      {
+        "time": "04:11",
+        "count": 8998
       }
     ]
   }
