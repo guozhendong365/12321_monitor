@@ -8235,11 +8235,15 @@
     ]
   },
   "2026-08-09": {
-    "daily_count": 1426,
+    "daily_count": 4050,
     "snapshots": [
       {
         "time": "01:19",
         "count": 1426
+      },
+      {
+        "time": "03:29",
+        "count": 4050
       }
     ]
   }
