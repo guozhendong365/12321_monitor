@@ -8482,11 +8482,15 @@
     ]
   },
   "2026-08-12": {
-    "daily_count": 1998,
+    "daily_count": 7628,
     "snapshots": [
       {
         "time": "01:27",
         "count": 1998
+      },
+      {
+        "time": "04:01",
+        "count": 7628
       }
     ]
   }
