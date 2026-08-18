@@ -9000,11 +9000,15 @@
     ]
   },
   "2026-08-18": {
-    "daily_count": 2958,
+    "daily_count": 4241,
     "snapshots": [
       {
         "time": "00:57",
         "count": 2958
+      },
+      {
+        "time": "02:15",
+        "count": 4241
       }
     ]
   }
