@@ -9097,11 +9097,15 @@
     ]
   },
   "2026-08-19": {
-    "daily_count": 2684,
+    "daily_count": 7174,
     "snapshots": [
       {
         "time": "00:58",
         "count": 2684
+      },
+      {
+        "time": "02:19",
+        "count": 7174
       }
     ]
   }
