@@ -10728,11 +10728,15 @@
     ]
   },
   "2026-09-27": {
-    "daily_count": 889,
+    "daily_count": 6230,
     "snapshots": [
       {
         "time": "00:09",
         "count": 889
+      },
+      {
+        "time": "06:07",
+        "count": 6230
       }
     ]
   }
