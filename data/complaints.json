@@ -10799,11 +10799,15 @@
     ]
   },
   "2026-09-30": {
-    "daily_count": 871,
+    "daily_count": 7294,
     "snapshots": [
       {
         "time": "00:59",
         "count": 871
+      },
+      {
+        "time": "06:31",
+        "count": 7294
       }
     ]
   }
