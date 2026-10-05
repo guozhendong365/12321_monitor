@@ -10924,11 +10924,15 @@
     ]
   },
   "2026-10-05": {
-    "daily_count": 908,
+    "daily_count": 6255,
     "snapshots": [
       {
         "time": "01:31",
         "count": 908
+      },
+      {
+        "time": "08:11",
+        "count": 6255
       }
     ]
   }
