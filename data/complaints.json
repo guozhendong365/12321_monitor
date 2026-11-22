@@ -12000,11 +12000,15 @@
     ]
   },
   "2026-11-22": {
-    "daily_count": 578,
+    "daily_count": 4839,
     "snapshots": [
       {
         "time": "00:52",
         "count": 578
+      },
+      {
+        "time": "07:42",
+        "count": 4839
       }
     ]
   }
