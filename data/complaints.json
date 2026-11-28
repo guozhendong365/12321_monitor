@@ -12098,11 +12098,15 @@
     ]
   },
   "2026-11-28": {
-    "daily_count": 506,
+    "daily_count": 6807,
     "snapshots": [
       {
         "time": "00:59",
         "count": 506
+      },
+      {
+        "time": "08:47",
+        "count": 6807
       }
     ]
   }
